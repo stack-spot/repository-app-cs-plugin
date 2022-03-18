@@ -103,12 +103,12 @@ public class TestRepository : ITestRepository
         _dynamoDB = dynamoDB;
     }
 
-    public async Task<Test> RemoveAsync(Test test)
+    public async Task<Test> LoadAsync(Test test)
     {
       await _dynamoDB.LoadAsync(test);
     }
 
-    public async Task<Test> RemoveAsync(string id, string idTest)
+    public async Task<Test> LoadAsync(string id, string idTest)
     {
       return await _dynamoDB.LoadAsync<Test>(id,idTest);
     }           
