@@ -1,6 +1,6 @@
 #### **Inputs**
 
-* RegionEndpoint - Endpoint regional que será utilizado para requisitar o S3 - Campo Obrigatório.
+* RegionEndpoint - Endpoint regional que será utilizado para requisitar o DynamoDB - Campo Obrigatório.
 
 Você pode sobrescrever a configuração padrão adicionando a seção `DynamoDB` em seu `appsettings.json`. Os valores aceitáveis você pode encontrar [aqui](https://docs.aws.amazon.com/pt_br/pt_br/AWSEC2/latest/WindowsGuide/using-regions-availability-zones.html#concepts-available-regions).
 
