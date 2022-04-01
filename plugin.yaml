@@ -8,6 +8,37 @@ inputs:
   name: region_endpoint
   default: "sa-east-1"
 
+hooks:
+#package
+  - type: run
+    trigger: before-render
+    commands:
+      - dotnet add src/{{global_inputs.project_name}}.Application package StackSpot.Database.DynamoDB
+      - dotnet add src/{{global_inputs.project_name}}.Infrastructure package StackSpot.Database.DynamoDB
+#dependencyinjection
+  - type: edit
+    trigger: before-render
+    path: "src/{{project_name}}.Application/Common/StackSpot/DependencyInjection.cs"
+    changes:
+      - search:
+          string: "using"
+          insert-before:
+            value: "using StackSpot.Database.DynamoDB;"
+          when:
+            not-exists: "using StackSpot.Database.DynamoDB;"
+      - search:
+          string: "return services"
+          insert-before:
+            value: "services.AddDynamoDB(configuration);\n"
+          when:
+            not-exists: "services.AddDynamoDB(configuration);"
+#format
+  - type: run
+    trigger: after-render
+    working-dir: src/{{project_name}}.Application
+    commands:
+      -  dotnet dotnet-format --include-generated
+
 displayName: Repository
 
 picture: "plugin.png"

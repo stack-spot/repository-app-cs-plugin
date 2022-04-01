@@ -1,38 +1,49 @@
+- **Descrição:** O plugin repository-app-cs-plugin adiciona a capacidade de provisionar o uso do Amazon DynamoDB. 
+
+- **Categoria:** Database. 
+- **Stack:** dotnet.
+- **Criado em:** 18/03/2022. 
+- **Última atualização:** 16/08/2022.
+- **Download:** https://github.com/stack-spot/repository-app-cs-plugin.git.
+
+
 ## **Visão Geral**
+### **repository-app-cs-plugin**
 
-O **repository-app-cs-plugin** adiciona em uma stack a capacidade de provisionar o uso do Amazon DynamoDB seja recuperando, salvando ou apagando entidades.
+Componente projetado para padronizar a comunicação com a Amazon DynamoDB para aplicações .NET Core.
 
-Para aplicar o plugin execute o comando:
+### Versões suportadas
+
+- net5.0
+- net6.0
+
+### Uso
+
+#### 1. Adicione o pacote NuGet `StackSpot.Database.DynamoDB` ao seu projeto.
+
 ```
-    $ stk apply plugin skynet-dotnet-stack/repository-app-cs-plugin
+dotnet add package StackSpot.Database.DynamoDB
 ```
 
-#### **Pré-requisitos**
-Para utilizar esse plugin é necessário ter uma stack dotnet criada pelo cli do StackSpot que você pode baixar [**aqui**](https://stackspot.com.br/).
-
-Ter instalado:
-- .NET 5 ou 6 
-- O template base de `rest-app-cs-template` já deverá estar aplicado para você conseguir utilizar este plugin. 
-
-#### **Inputs**
+#### 2. Configure as variáveis.
 
 * RegionEndpoint - Endpoint regional que será utilizado para requisitar o DynamoDB - Campo Obrigatório.
 
-Você pode sobrescrever a configuração padrão adicionando a seção `DynamoDB` em seu `appsettings.json`. Os valores aceitáveis você pode encontrar [aqui](https://docs.aws.amazon.com/pt_br/pt_br/AWSEC2/latest/WindowsGuide/using-regions-availability-zones.html#concepts-available-regions).
+Você pode sobrescrever a configuração padrão adicionando a seção `AddDynamoDB` em seu `appsettings.json`.
 
 ```json
   "DynamoDB": {
       "RegionEndpoint": "us-east-1"
   }
 ```
-
-Adicione ao seu `IServiceCollection` via `services.AddDynamoDB()` no `Startup` da aplicação ou `Program` tendo como parêmetro de entrada `IConfiguration` e `IWebHostEnvironment`. 
+  
+#### 3. Adicione ao seu `IServiceCollection` via `services.AddDynamoDB()` no `Startup` da aplicação ou `Program` tendo como parametro de entrada `IConfiguration` e `IWebHostEnvironment`. 
 
 ```csharp
 services.AddDynamoDB(Configuration);
 ```
 
-#### **Operações**
+### Implementação
 
 * A classe que será utilizada para o mapeamento da tabela deverá ter a anotação `DynamoDBTable`, é aqui que definimos o nome da tabela. 
 * A chave de partição e a chave de classificação(se presente) devem ter, respectivamente, as anotações no nível de propriedade `DynamoDBRangeKey` e `DynamoDBRangeKey`.
@@ -119,12 +130,12 @@ public class TestRepository : ITestRepository
         _dynamoDB = dynamoDB;
     }
 
-    public async Task<Test> LoadAsync(Test test)
+    public async Task<Test> RemoveAsync(Test test)
     {
       await _dynamoDB.LoadAsync(test);
     }
 
-    public async Task<Test> LoadAsync(string id, string idTest)
+    public async Task<Test> RemoveAsync(string id, string idTest)
     {
       return await _dynamoDB.LoadAsync<Test>(id,idTest);
     }           
